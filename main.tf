@@ -7,3 +7,25 @@ resource "azurerm_resource_group" "tf_test" {
     name = "tftestdev"
     location = "East US 2"
 }
+
+resource "azurerm_container_group" "tfcg_test" {
+    name = "testapidev"
+    location = azurerm_resource_group.tf_test.location
+    resource_group_name = azurerm_resource_group.tf_test.name
+
+    ip_address_type = "public"
+    dns_name_label = "terraformtestdev"
+    os_type = "Linux"
+
+    container {
+        name = "weatherapi"
+        image = "rsmith5901/weatherapi"
+        cpu = "1"
+        memory = "1"
+
+        ports {
+            port        = 80
+            protocol    = "TCP"
+        }
+    }
+}
